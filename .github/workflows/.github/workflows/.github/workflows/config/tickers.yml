@@ -1,0 +1,15 @@
+# Yahoo Finance tickers (indices & ETFs as examples)
+yahoo:
+  - "^GSPC"     # S&P 500 index
+  - "SPY"       # S&P 500 ETF
+  - "QQQ"       # Nasdaq 100 ETF
+  - "IWM"       # Russell 2000 ETF
+  - "TLT"       # 20+ Year Treasury ETF
+
+# FRED series (macro series examples)
+fred:
+  - "DGS10"     # 10-Year Treasury Constant Maturity Rate
+  - "T10YIE"    # 10-Year Breakeven Inflation Rate
+  - "CPIAUCSL"  # CPI (All Urban Consumers)
+  - "UNRATE"    # Unemployment Rate
+  - "M2SL"      # M2 Money Stock (weekly)
