@@ -1,0 +1,47 @@
+name: Market Data Pipeline
+
+on:
+  schedule:
+    - cron: "30 23 * * *"   # daily at 23:30 UTC
+  workflow_dispatch:        # manual run button
+
+permissions:
+  contents: write           # needed to push commits
+
+jobs:
+  fetch-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Fetch market data (Yahoo + FRED)
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python scripts/fetch_market_data.py
+
+      - name: Build charts (optional)
+        run: |
+          python scripts/make_charts.py
+
+      - name: Commit & push changes (if any)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(data): daily market data update"
+          branch: ${{ github.ref_name }}
+          file_pattern: |
+            data/**
